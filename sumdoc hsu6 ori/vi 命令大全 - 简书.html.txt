@@ -1,0 +1,232 @@
+   _登录__ _注册__ _写文章__ 
+_首页_ _下载APP_  
+vi 命令大全
+_
+ZHOUZAIHUI__ 关注  赞赏支持  
+vi 命令大全_
+_ _ZHOUZAIHUI_  关注  
+2018.04.09 10:04:39字数 1,602 阅读 1,188 
+1进入vi 
+vi filename   打开或新建文档，并将光标置于第一行行首
+vi +n filename   打开文件，并将光标置于第n行首
+vi + filename   打开文件，并将光标置于最后一行首
+vi +/pattern filename   打开文件，并将光标置于第一个与pattern匹配的串处
+vi -r filename   在上次正用vi编辑时发生系统崩溃，恢复filename
+vi filename....filename   打开多个文件，依次进行编辑
+2 保存退出 
+w   保存当前文件
+w /tmp1   另存为/tmp1
+20,59w /tmp1   仅将20-59行之间的内存另存为/tmp1
+x 或 wq   保存退出
+q   退出vi
+q!   退出不保存 >
+!command   执行shell命令command
+n1,n2 w !command   将文件中n1行至n2行的内容作为command的输入并执行之，若不指定n1，n2，则表示将整个文件内容作为command的输入
+r !command   将命令command的输出结果放到当前行
+w !sudo tee %   保存没权限时，可获取权限再保存
+3 光标移动 
+h  光标左移一个字符
+l  光标右移一个字符
+space  光标右移一个字符
+Backspace  光标左移一个字符
+k或 Ctrl+p   光标上移一行
+j或 Ctrl+n   光标下移一行
+Enter   光标下移一行
+w 或 W   光标右移一个字至字首
+b 或 B   光标左移一个字至字首
+e 或 E   光标右移一个字至字尾
+)   光标移至句尾
+(   光标移至句首
+}   光标移至段落开头
+{   光标移至段落结尾
+nG   光标移至第n行首
+n+   光标下移n行
+n-   光标上移n行
+n$   光标移至第n行尾
+H   光标移至屏幕顶行
+M   光标移至屏幕中间行
+L   光标移至屏幕最后行
+0   （注意是数字零）光标移至当前行首
+$   光标移至当前行尾
+4 屏幕翻滚 
+Ctrl+u   向文件首翻半屏
+Ctrl+d   向文件尾翻半屏
+Ctrl+f   向文件尾翻一屏
+Ctrl＋b   向文件首翻一屏
+nz   将第n行滚至屏幕顶部，不指定n时将当前行滚至屏幕顶部
+5 插入 
+i  在光标前
+I   在当前行首
+a   光标后
+A   在当前行尾
+o   在当前行之下新开一行
+O   在当前行之上新开一行
+r   替换当前字符
+R   替换当前字符及其后的字符，直至按ESC键
+s   从当前光标位置处开始，以输入的文本替代指定数目的字符
+S   删除指定数目的行，并以所输入文本代替
+ncw 或 nCW   修改指定数目的字
+nCC   修改指定数目的行
+6 删除 
+ndw 或 ndW   删除光标处开始及其后的n-1个字
+do   删至行首
+d$   删至行尾
+ndd   删除当前行及其后n-1行
+x 或 X   删除一个字符，x删除光标后的，而X删除光标前的
+Ctrl+u   删除输入方式下所输入的文本
+n1,n2 d   将n1行到n2行之间的内容删除
+%d   删除全部内容
+1,$d   删除全部内容
+7 复制粘贴、剪切、移动 
+yy   复制当前行
+nyy   复制当前行开始的n行
+  先按 v 然后方向键选择区域，按 y 复制选中行
+dd   剪切当前行
+p（小）   在当前光标处下面粘贴内容
+P（大）   在当前光标处上面粘贴内容
+n1,n2 co n3   将n1行到n2行之间的内容拷贝到第n3行下
+n1,n2 m n3   将n1行到n2行之间的内容移至到第n3行下
+8 搜索（查找） 
+/abc   从光标开始处向文件尾搜索abc
+?abc   从光标开始处向文件首搜索abc
+//abc   从光标开始处向文件尾搜索/abc，其中/是转义
+n   在同一方向重复上一次搜索命令
+N   在反方向上重复上一次搜索命令
+9 替换 
+s/vivian/sky/   替换当前行第一个 vivian 为 sky
+s/vivian/sky/g   替换当前行所有 vivian 为 sky
+n,$s/vivian/sky/   替换第 n 行开始到最后一行中每一行的第一个 vivian 为 sky
+n,$s/vivian/sky/g   替换第 n 行开始到最后一行中每一行所有 vivian 为sky
+%s/vivian/sky/g   （等同于 g/vivian/s//sky/） 替换每一行的每一个 vivian 为 sky
+s#vivian/#sky#   替换当前行第一个 vivian/ 为 sky/（可以使用 # 或 + 作为分隔符，此时中间出现的 / 不会作为分隔符）
+s/p1/p2/g   将当前行中所有p1均用p2替代
+n1,n2s/p1/p2/g   将第n1至n2行中所有p1均用p2替代
+g/p1/s//p2/g   将文件中所有p1均用p2替换
+10 寄存器 
+"?nyy   将当前行及其下n行的内容保存到寄存器？中，其中?为一个字母，n为一个数字
+"?nyw   将当前行及其下n个字保存到寄存器？中，其中?为一个字母，n为一个数字
+"?nyl   将当前行及其下n个字符保存到寄存器？中，其中?为一个字母，n为一个数字
+"?p   取出寄存器？中的内容并将其放到光标位置处。这里？可以是一个字母，也可以是一个数字
+ndd   将当前行及其下共n行文本删除，并将所删内容放到1号删除寄存器中
+11 选项设置 
+set number   显示行号
+set number!   不显示行号，其它选项同理加！号
+set all   列出所有选项设置情况
+set term   设置终端类型
+set ignorance   在搜索中忽略大小写
+set list   显示制表位(Ctrl+I)和行尾标志（$)
+set report   显示由面向行的命令修改过的数目
+set terse   显示简短的警告信息
+set warn   在转到别的文件时若没保存当前文件则显示NO write信息
+set nomagic   允许在搜索模式中，使用前面不带“”的特殊字符
+set nowrapscan   禁止vi在搜索到达文件两端时，又从另一端开始
+set mesg   允许vi显示其他用户用write写到自己终端上的信息
+
+参考文献：
+_https://www.cnblogs.com/mondol/p/vi-examples.html_ 
+1人点赞 
+_Linux__ 
+"小礼物走一走，来简书关注我"
+赞赏支持  还没有人赞赏，支持一下 
+_
+_ _ZHOUZAIHUI_  
+总资产9 (约0.87元) 共写了5.6W字 获得122个赞 共66个粉丝 
+关注  
+推荐阅读 _更多精彩内容_ 
+ * _linux下vi命令大全_ 进入vi的命令 vi filename :打开或新建文件，并将光标置于第一行首 vi +n filename ：打..._
+Michael_林__ 阅读 103 评论 0 赞 2 
+ * _vi命令大全_ 进入vi的命令 vi filename :打开或新建文件，并将光标置于第一行首vi +n filename ：打开..._
+八目朱勇铭__ 阅读 135 评论 0 赞 0 
+ * _vi_编辑器命令示例_ 进入vi vi filename# 打开或新建文件，并将光标置于第一行首 vi +n filename# 打开文件..._
+wind315__ 阅读 78 评论 0 赞 0 
+ * _vi(vim)的常用操作_ vi(vim)可以说是linux中用得最多的工具了，不管你配置服务也好，写脚本也好，总会用到它。但是，vim作为一..._
+梁世勇__ 阅读 711 评论 2 赞 12 
+ * _vi使用方法介绍【详细】_ vi使用方法详细介绍 vi编辑器是所有Unix及Linux系统下标准的编辑器，它的强大不逊色于任何最新的文本编辑 ..._
+Michael_林__ 阅读 255 评论 0 赞 8 
+
+_
+_ _ZHOUZAIHUI_  
+关注  
+总资产9 (约0.87元)
+_JupyterNotebook开启远程访问_ 
+阅读 246
+_Manjaro-kde安装TIM/QQ_ 
+阅读 3,726
+推荐阅读 _三面字节跳动被虐得“体无完肤”，15天读完这份pdf，终拿下美团研发岗offer_ 
+阅读 39,633
+_闭关修炼21天，“啃完”283页pdf，我终于4面拿下字节跳动offer_ 
+阅读 100,754
+_对于二本渣渣来说，面试阿里P6也太难了！（两年crud经验，已拿offer）_ 
+阅读 21,596
+_离开菜鸟&新的面试体验_ 
+阅读 4,929
+_Spring_Cloud_Stream_进阶配置——使用延迟队列实现“定时关闭超时未支付订单”_ 
+阅读 826
+评论0 
+赞1 
+1赞 2赞 
+赞赏
+CTRL+V to toggle the panel
+  
+  
+
+ *    
+ *    
+ *    
+
+           
+  
+
+ *    
+ *    
+ *    
+
+   
+  
+   
+   
+   
+   
+   
+   
+   
+   
+         
+         
+   
+      
+
+parsed links:
+https://www.jianshu.com/ @ index = 0 length = 0
+https://www.jianshu.com/sign_in @ index = 3 length = 9
+https://www.jianshu.com/sign_up @ index = 13 length = 9
+https://www.jianshu.com/writer @ index = 23 length = 12
+https://www.jianshu.com/ @ index = 37 length = 8
+https://www.jianshu.com/apps?utm_medium=desktop&utm_source=navbar-apps @ index = 46 length = 11
+https://www.jianshu.com/u/68d950bfae93 @ index = 76 length = 14
+https://www.jianshu.com/u/68d950bfae93 @ index = 129 length = 3
+https://www.jianshu.com/u/68d950bfae93 @ index = 133 length = 12
+https://link.jianshu.com/?t=https%3A%2F%2Fwww.cnblogs.com%2Fmondol%2Fp%2Fvi-examples.html @ index = 5577 length = 51
+https://www.jianshu.com/nb/24190874 @ index = 5642 length = 8
+https://www.jianshu.com/u/68d950bfae93 @ index = 5743 length = 3
+https://www.jianshu.com/u/68d950bfae93 @ index = 5747 length = 12
+https://www.jianshu.com/ @ index = 5857 length = 20
+https://www.jianshu.com/p/903da3a20f97 @ index = 5882 length = 24
+https://www.jianshu.com/u/353f86b03179 @ index = 6017 length = 15
+https://www.jianshu.com/p/f82355a6255c @ index = 6063 length = 16
+https://www.jianshu.com/u/bba38d4d9ce0 @ index = 6192 length = 19
+https://www.jianshu.com/p/933102bc505b @ index = 6242 length = 26
+https://www.jianshu.com/u/40fe5b7c4269 @ index = 6377 length = 11
+https://www.jianshu.com/p/e66ae3add58d @ index = 6418 length = 24
+https://www.jianshu.com/u/3bf4896b7fad @ index = 6587 length = 13
+https://www.jianshu.com/p/1ade6552e79c @ index = 6632 length = 34
+https://www.jianshu.com/u/353f86b03179 @ index = 6811 length = 15
+https://www.jianshu.com/u/68d950bfae93 @ index = 6855 length = 3
+https://www.jianshu.com/u/68d950bfae93 @ index = 6859 length = 12
+https://www.jianshu.com/p/edb9b76ca1fd @ index = 6907 length = 35
+https://www.jianshu.com/p/05f6d277eaae @ index = 6955 length = 25
+https://www.jianshu.com/p/d6e9b1c211dd @ index = 7008 length = 102
+https://www.jianshu.com/p/745757d373e9 @ index = 7126 length = 82
+https://www.jianshu.com/p/5fe981fd4ab9 @ index = 7225 length = 94
+https://www.jianshu.com/p/3e678dec60a8 @ index = 7335 length = 33
+https://www.jianshu.com/p/6c8f672b68c8 @ index = 7383 length = 103

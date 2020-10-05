@@ -1,0 +1,57 @@
+Atitit 信息安全发 辞职退出更换机器清理list check list
+
+目录
+	1. ---------------账号类	1
+	2. 知识管理	1
+	2.1. Email  thurbird  foxmail	1
+	2.2. 笔记类 Evernote	1
+	3. 通讯类	1
+	4. 网盘类	2
+	5. 浏览器 chrome	2
+	6. 文档类	2
+	7. 代码类 git	2
+	8. 综合类	2
+	8.1. Google	2
+	8.2. Window凭据	2
+	9. -----------------文档信息类	2
+	9.1. 联系人 短信	2
+	9.2. Code docx note	2
+	9.3. Pic image music	3
+	9.4. Video	3
+	10. --------------------删除无用的app	3
+	10.1. 清空回收站	3
+	10.2. 每一个app check	3
+	11. 交接文档说明	3
+
+---------------账号类
+知识管理
+Email  thurbird  foxmail
+笔记类 Evernote 
+通讯类
+Telegram  wechat qq
+网盘类
+百度 onedriver gdriver
+浏览器 chrome
+文档类
+Office wps
+代码类 git
+
+综合类
+Google  
+Window凭据
+Cp sys could sync acc... and other acc
+
+
+-----------------文档信息类
+联系人 短信  
+Code docx note
+日程类
+Pic image music
+Video
+
+--------------------删除无用的app
+清空回收站
+每一个app check
+交接文档说明
+
+

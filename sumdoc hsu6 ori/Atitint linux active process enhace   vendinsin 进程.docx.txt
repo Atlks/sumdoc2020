@@ -1,0 +1,22 @@
+Atitint linux active process enhace   vendinsin 进程保活提升稳定性
+
+
+Crontab timer+gc
+
+端口检测 重启 监控+crontab 每分钟
+
+ tomcat=`netstat -an | grep ":8888" | awk '{print $0}' | wc -l`
+if [ $tomcat -eq 0 ];then
+# 如果端口没有占用的话要怎么怎么样
+  echo "noderun"
+nohup	  node /data/ws.js 8888 >ws.log 2>&1 &
+  node /data/ws.js  8888
+else 
+
+# 如果端口被占用的话要怎么怎么
+
+echo "运行正常!"
+
+fi
+
+

@@ -1,0 +1,232 @@
+_php程序员的笔记
+_ 
+
+ * _网站首页_ 
+ * _PHP笔记_ 
+ * _字符串处理_ 
+ * _php函数总结_ 
+ * _正则表达式_ 
+ * _模板框架使用_ 
+ * _我的网站模板笔记_ 
+ * _Ecshop二次开发笔记_ 
+ * _php源码下载_ 
+
+ * _数据库教程_ 
+ * _MySQL数据库_ 
+ * _MongoDB_ 
+ * _Access数据库_ 
+ * _Redis_ 
+
+ * _JavaScript教程_ 
+ * _Jquery基础_ 
+ * _Jquery特效_ 
+ * _JS常用函数_ 
+ * _开源插件开发_ 
+ * _谷歌地图开发_ 
+
+ * _HTML教程_ 
+ * _DIV+CSS技术篇_ 
+ * _网站优化笔记_ 
+ * _HTML5_技术_ 
+
+ * _操作系统技巧_ 
+ * _windows_7系统篇_ 
+ * _Linux操作系统篇_ 
+ * _服务器_ 
+
+
+_php程序员的笔记_ -> _PHP笔记_ -> _php函数总结_ -> php解析url (parse_url) 参数成数组 (parse_str)
+php解析url (parse_url) 参数成数组 (parse_str)
+
+通过php获取了当前url，如果需要提取url中的参数的话该如何操作呢？这个过程其实挺简单，使用php的两个内置函数就可以顺利完成，即parse_url和parse_str函数。下面将对这两个函数做简要说明以及用示例说明如何提取url中的参数。
+
+（1）parse_url (PHP 4, PHP 5) — 解析 URL，返回其组成部分，函数原型如下： 
+
+mixed parse_url ( string $url [, int $component = -1 ] )
+
+本函数解析一个 URL 并返回一个关联数组，包含在 URL 中出现的各种组成部分。
+
+本函数不是用来验证给定 URL 的合法性的，只是将其分解为下面列出的部分。不完整的 URL 也被接受，parse_url() 会尝试尽量正确地将其解析。
+
+参数说明
+
+url 要解析的 URL。无效字符将使用 _ 来替换。
+
+component 指定 PHP_URL_SCHEME、 PHP_URL_HOST、 PHP_URL_PORT、 PHP_URL_USER、 PHP_URL_PASS、 PHP_URL_PATH、 PHP_URL_QUERY 或 PHP_URL_FRAGMENT 的其中一个来获取 URL 中指定的部分的 string。 （除了指定为 PHP_URL_PORT 后，将返回一个 integer 的值）。
+
+返回值
+
+对严重不合格的 URL，parse_url() 可能会返回 FALSE。
+
+如果省略了 component 参数，将返回一个关联数组 array，在目前至少会有一个元素在该数组中。数组中可能的键有以下几种：
+
+scheme - 如 http 
+host 
+port 
+user 
+pass 
+path 
+query - 在问号 ? 之后 
+fragment - 在散列符号 # 之后
+
+如果指定了 component 参数， parse_url() 返回一个 string （或在指定为 PHP_URL_PORT 时返回一个 integer）而不是 array。如果 URL 中指定的组成部分不存在，将会返回 NULL。
+
+（2）parse_str - 把查询字符串解析到变量中，函数原型如下： 
+
+parse_str(string,array)
+
+参数说明
+ 
+string 必需。规定要解析的字符串。
+
+array 可选。规定存储变量的数组名称。该参数指示变量存储到数组中。如果未设置 array 参数，由该函数设置的变量将覆盖已由同名变量。
+
+注释：php.ini 中的 magic_quotes_gpc 设置影响该函数的输出。如果已启用，那么在 parse_str() 解析之前，变量会被 addslashes() 转换。
+
+（3）具体提取url中的参数示例如下： 
+<?php $url='http://www.phpernote.com/ad.php?id=325&action=index&page=3'; $urlarr=parse_url($url); parse_str($urlarr['query'],$parr); print_r($urlarr); print_r($parr); 
+打印的结果如下：
+
+Array
+(
+    [scheme] => http
+    [host] => www.phpernote.com
+    [path] => /ad.php
+    [query] => id=325&action=index&page=3
+)
+Array
+(
+    [id] => 325
+    [action] => index
+    [page] => 3
+)
+您可能感兴趣的文章
+
+ * _PHP获取最近n天组成数组_ 
+ * _PHP_Curl批量多线程打开网址的类_ 
+ * _PHP简单的socket_ 
+ * _PHP生成短网址的思路以及实现方法_ 
+ * _PHP_date()参数说明_ 
+ * _PHP对多维数组进行array_values_ 
+ * _PHP递归函数中使用return需注意_ 
+ * _PHP合并数组+与array_merge的区别_ 
+
+转载请注明出处：_php程序员的笔记_ 
+本文永久地址：_http://www.phpernote.com/php-function/1009.html_ 
+最后修改时间：2014年05月06日 21时58分15秒     文章来源：-わ千与千寻
+上一篇：_js颜色选择器jscolor_ 
+下一篇：_php汉字验证码_ 
+热门文章
+
+ * _php获取客户端真实ip地址的三种方法_ 
+ * _php模拟发送get请求_ 
+ * _php获取本周和上周的开始日期和结束日期_ 
+ * _php获取远程图片并下载保存到本地_ 
+ * _PHP获取当前时间、时间戳方法大总结_ 
+ * _php如何删除数组的第一个元素和最后一个元素_ 
+
+随机文章
+
+ * _PHP获取以字母递增为键值的数组_ 
+ * _MySQL批量更新数据(封装为php方法)_ 
+ * _redis_实例化以及ping_的操作_ 
+ * _PHP_浅谈_==_和===_中，数字和字符串比较的问题_ 
+ * _php_获取代码执行时间和消耗的内存_ 
+ * _php自动给内容里面的a超级链接加上nofollow标签_ 
+
+
+ * 
+ * 周热门文章 
+ * _php判断变量类型常用方法_ 
+ * _php在数组中查找某个值是否存在（in_array(),array_search(),array_key_exists()）_ 
+ * _php提示Maximum_execution_time_of_30_seconds_exceeded...错误的解决办法_ 
+ * _php判断函数，类，类方法是否存在_ 
+ * _php解析url_(parse_url)_参数成数组_(parse_str)_ 
+ * _PHP去除数组中的空值元素（array_filter）_ 
+ * _PHP中exit()与die()的区别_ 
+ * _php判断文件或目录(文件夹)是否存在_ 
+ * _PHP向文件写入或追加数据_ 
+ * _php二维数组按某个字段排序_ 
+
+
+
+All rights reserved. Design by -わ千与千寻. _京ICP备16025782号-1_  _网站地图_  _友情连接_  _私人建站_  _招募投稿_  _广告服务_  _互联网工具大全_   
+_-_ _×_ 
+聊天列表
+
+
+
+parsed links:
+http://www.phpernote.com/ @ index = 0 length = 24
+/ @ index = 30 length = 14
+/php/ @ index = 49 length = 11
+/php-string/ @ index = 65 length = 17
+/php-function/ @ index = 87 length = 17
+/php-regular-expression/ @ index = 109 length = 17
+/php-template-framework/ @ index = 131 length = 20
+/php-template/ @ index = 156 length = 26
+/php-ecshop/ @ index = 187 length = 26
+/code-download/ @ index = 218 length = 17
+/database/ @ index = 241 length = 17
+/mysql/ @ index = 263 length = 16
+/mongodb/ @ index = 284 length = 9
+/access/ @ index = 298 length = 17
+/redis/ @ index = 320 length = 7
+/javascript/ @ index = 333 length = 18
+/jquery/ @ index = 356 length = 14
+/jquery-effects/ @ index = 375 length = 14
+/javascript-function/ @ index = 394 length = 16
+/open-source-plug-in/ @ index = 415 length = 20
+/google-map/ @ index = 440 length = 20
+/html/ @ index = 466 length = 12
+/div-css/ @ index = 483 length = 18
+/seo/ @ index = 506 length = 20
+/html5/ @ index = 531 length = 14
+/operating-system/ @ index = 551 length = 20
+/windows-7/ @ index = 576 length = 20
+/linux/ @ index = 601 length = 22
+/server/ @ index = 628 length = 11
+http://www.phpernote.com/ @ index = 643 length = 23
+/php/ @ index = 670 length = 11
+/php-function/ @ index = 685 length = 17
+/php-function/1444.html @ index = 3499 length = 33
+/php-function/416.html @ index = 3537 length = 43
+/php-function/1141.html @ index = 3585 length = 20
+/php-function/845.html @ index = 3610 length = 47
+/php-function/550.html @ index = 3662 length = 24
+/php-function/1389.html @ index = 3691 length = 38
+/php-function/289.html @ index = 3734 length = 41
+/php-string/351.html @ index = 3780 length = 41
+http://www.phpernote.com/ @ index = 3848 length = 23
+http://www.phpernote.com/php-function/1009.html @ index = 3894 length = 49
+/javascript-function/1008.html @ index = 4048 length = 26
+/php-function/1010.html @ index = 4088 length = 20
+/php-function/322.html @ index = 4127 length = 49
+/php-function/663.html @ index = 4181 length = 26
+/php-function/1019.html @ index = 4212 length = 56
+/php-function/336.html @ index = 4273 length = 47
+/php-function/727.html @ index = 4325 length = 50
+/php-function/637.html @ index = 4380 length = 62
+/php-function/1504.html @ index = 4462 length = 44
+/php-function/1501.html @ index = 4511 length = 45
+/php-function/1507.html @ index = 4561 length = 37
+/php-function/1499.html @ index = 4603 length = 62
+/php-function/1500.html @ index = 4670 length = 48
+/php-function/1511.html @ index = 4723 length = 62
+/php-function/241.html @ index = 4816 length = 35
+/php-function/594.html @ index = 4856 length = 94
+/php-function/710.html @ index = 4955 length = 80
+/php-function/905.html @ index = 5040 length = 47
+/php-function/1009.html @ index = 5092 length = 54
+/php-function/1052.html @ index = 5151 length = 53
+/php-function/1064.html @ index = 5209 length = 31
+/php-function/1101.html @ index = 5245 length = 49
+/php-function/1102.html @ index = 5299 length = 35
+/php-function/1393.html @ index = 5339 length = 38
+/web_tools/private/link.php?url=http://www.miitbeian.gov.cn/ @ index = 5431 length = 24
+/webmap.html @ index = 5457 length = 14
+/seo/344.html @ index = 5473 length = 14
+/news/294.html @ index = 5489 length = 14
+/news/475.html @ index = 5505 length = 14
+/news/770.html @ index = 5521 length = 14
+/web_tools/ @ index = 5537 length = 23

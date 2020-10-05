@@ -1,0 +1,33 @@
+Atitit work log u6
+
+
+
+22
+（5/25-5/30）
+这周主要工作是修改app端bug，比赛时间抓取
+雷速反爬措施解决抓取
+23(0601--66
+
+上线bug修复，与工作交接
+
+
+24( 67--613
+
+与工作交接  bug修复
+
+
+
+
+worklog
+
+525-530
+* 远程web端口   同步数据完善
+* 进球通知
+* 单独足球通知tlive
+* 雷速数据抓取
+* 比赛时间bug修复
+
+
+sudo yum install firefox
+sudo yum install xrdp vnc4serve
+

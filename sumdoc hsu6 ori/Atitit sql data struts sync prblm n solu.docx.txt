@@ -1,0 +1,40 @@
+Atitit sql data struts sync prblm n solu
+
+DETERMINISTIC, NO SQL, or READS SQL DATA
+The setting relaxes the checking for non-deterministic functions. Non-deterministic functions are functions that modify data (i.e. have update, insert or delete statement(s)). For more info, see here.
+Please note, if binary logging is NOT enabled, this setting does not apply.
+
+
+Set foreigt key close 
+View
+219
+
+There are two ways to fix this:
+
+Execute the following in the MySQL console:
+
+SET GLOBAL log_bin_trust_function_creators = 1;
+
+SET GLOBAL log_bin_trust_function_creators = 1;
+
+ set global FOREIGN_KEY_CHECKS=1;
+
+
+、error:the user specified as a definer ('root'@'%') does not exist
+这是由于当前用户执行某些sql时权限不足导致的，直接赋予当前用户所有权限就行了：
+grant all privileges on *.* to root@"%" identified by ".";
+flush privileges;
+ 
+注意：导入过程中有可能出现多个数据库相互依赖和多个视图相互依赖的情况，这要调整执行顺序方能正确完成导入。
+
+将安全性修改为invoker
+
+1）在navicat上进行修改
+
+
+
+2）通过sql语句进行修改
+
+1 ALTER PROCEDURE proc_name SQL SECURITY INVOKER 
+
+

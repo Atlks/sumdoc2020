@@ -1,0 +1,725 @@
+--2018/3/12
+
+--西药
+do $$  
+begin
+if not exists
+(select 1 from sys_scripts where id = 10000057) then
+INSERT INTO sys_scripts ("id", "categoryid", "code", "name", "description", "xtype", 
+"datasourceid", "displaynames", "xrownum", "xtext", "updatedate", "updateuser", "updatemode", 
+"xtext1", "operatetype") 
+VALUES ('10000057', '86', 'mzys', '根据id查询西药solr索引数据', '根据id查询西药solr索引数据', '1', '0', NULL, 
+'1', NULL, '2018-02-01 10:12:50', NULL, '0', 'SELECT distinct
+		  h.BCK01A, COALESCE(@dbtype,''null'')||@yiyuanid||a.bda01||h1.bck01||h.bck01a||d.bby01 AS ID, COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, f.AAS02, A.BBX01, A.BDO01, d.BBY04 AS BBX04, A.BBX05, d.BBY05, A.BDG02,
+			(
+				COALESCE (b.BAP02, '''') || ''、'' || COALESCE (C .BAG11, '''') || ''、'' || CASE
+				WHEN COALESCE (f2.BHJ01, 0) = 0 THEN
+					''''
+				ELSE
+					f2.BHJ02
+				END
+			) AS NBBX13,
+		 b.BBT10, b.BBT11, d.BBY06, d.BBE02, d.BBY01, d.BBY08, C.BAG27,
+		 CASE WHEN 1 = 1 THEN C.BDG02A ELSE C.BDG02B END AS NUnit,
+		 CASE WHEN getsysparamvalue(9999, 9999, 60) = ''2'' THEN GetDrugPrice ( h1.BCK01, d.BBY01, 1::INT, ''医保'' :: VARCHAR ) ELSE CASE WHEN 1 = 1 THEN d.BBY25 * C .BAG05 ELSE d.BBY25 * C .BAG07 END END AS Price,
+		 COALESCE (h1.LSQty, 0) / C .BAG05 AS amount,
+		 f1.BCG02, d.BBY29, f.AAS07, COALESCE(h1.BCK01, 0) BCK01, d.BBY44, d.acf01, g.abbrw, g.abbrp, g.bdk03, c.bag03,c.bag05,h2.bck03
+		FROM BBX1 A
+		JOIN BBT1 b ON A .BBX01 = b.BBX01
+		JOIN BAG1 C ON b.BBX01 = C.BBX01
+		JOIN BBY1 d ON C.BBY01 = d.BBY01 AND d.ACF01 !=2 AND now() :: TIMESTAMP < d.BBY31 and d.bby01 in (@bby01)
+		JOIN BDA1 e ON A.BDA01 = e.BDA01
+		JOIN BBJ1 h ON d.BBY01 = h.BBY01 
+		JOIN V_DPK6 h1 ON h.BBY01 = h1.BBY01 AND h.BCK01B = h1.BCK01 AND h1.ACF01 !=2 and h1.bck01 !=0
+		and h1.bck01 in (select bck01 from bck1 where corporationid = @yiyuanid::int)
+		AND ((getsysparamvalue(9999, 9999, 1) = ''1'') OR (getsysparamvalue(9999, 9999, 1) <> ''1'' AND  COALESCE (h1.LSQty, 0) > 0 ))
+		left join bck1 h2 on h1.bck01 = h2.bck01 
+		LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+		LEFT JOIN BCG1 f1 ON f1.BCG01 = d.BCG01
+		LEFT JOIN BHJ1 f2 ON f2.BHJ01 = b.BBT08
+		left join BDK1 G on G.BBX01 = A.BBX01 and g.bdk06 = 9
+		WHERE A.BDA01 < ''4''
+		and h.bck01a in (select a.bck01 from bck1 a join baz1 b on a.bck01=b.bck01 and b.bau01 in (''01'') and b.acf01 !=2 where a.corporationid=@yiyuanid)
+		AND EXISTS (
+			SELECT * FROM
+				( SELECT BCK01, ACF01 FROM baz1 WHERE bau01 IN (''51'', ''52'', ''53'') ) h3
+			WHERE h3.BCK01 = h.BCK01B AND  h3.ACF01 != 2
+		);', NULL);
+else 
+update sys_scripts set xtext1 = 'SELECT distinct
+		  h.BCK01A, COALESCE(@dbtype,''null'')||@yiyuanid||a.bda01||h1.bck01||h.bck01a||d.bby01 AS ID, COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, f.AAS02, A.BBX01, A.BDO01, d.BBY04 AS BBX04, A.BBX05, d.BBY05, A.BDG02,
+			(
+				COALESCE (b.BAP02, '''') || ''、'' || COALESCE (C .BAG11, '''') || ''、'' || CASE
+				WHEN COALESCE (f2.BHJ01, 0) = 0 THEN
+					''''
+				ELSE
+					f2.BHJ02
+				END
+			) AS NBBX13,
+		 b.BBT10, b.BBT11, d.BBY06, d.BBE02, d.BBY01, d.BBY08, C.BAG27,
+		 CASE WHEN 1 = 1 THEN C.BDG02A ELSE C.BDG02B END AS NUnit,
+		 CASE WHEN getsysparamvalue(9999, 9999, 60) = ''2'' THEN GetDrugPrice ( h1.BCK01, d.BBY01, 1::INT, ''医保'' :: VARCHAR ) ELSE CASE WHEN 1 = 1 THEN d.BBY25 * C .BAG05 ELSE d.BBY25 * C .BAG07 END END AS Price,
+		 COALESCE (h1.LSQty, 0) / C .BAG05 AS amount,
+		 f1.BCG02, d.BBY29, f.AAS07, COALESCE(h1.BCK01, 0) BCK01, d.BBY44, d.acf01, g.abbrw, g.abbrp, g.bdk03, c.bag03,c.bag05,h2.bck03
+		FROM BBX1 A
+		JOIN BBT1 b ON A .BBX01 = b.BBX01
+		JOIN BAG1 C ON b.BBX01 = C.BBX01
+		JOIN BBY1 d ON C.BBY01 = d.BBY01 AND d.ACF01 !=2 AND now() :: TIMESTAMP < d.BBY31 and d.bby01 in (@bby01)
+		JOIN BDA1 e ON A.BDA01 = e.BDA01
+		JOIN BBJ1 h ON d.BBY01 = h.BBY01 
+		JOIN V_DPK6 h1 ON h.BBY01 = h1.BBY01 AND h.BCK01B = h1.BCK01 AND h1.ACF01 !=2 and h1.bck01 !=0
+		and h1.bck01 in (select bck01 from bck1 where corporationid = @yiyuanid::int)
+		AND ((getsysparamvalue(9999, 9999, 1) = ''1'') OR (getsysparamvalue(9999, 9999, 1) <> ''1'' AND  COALESCE (h1.LSQty, 0) > 0 ))
+		left join bck1 h2 on h1.bck01 = h2.bck01 
+		LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+		LEFT JOIN BCG1 f1 ON f1.BCG01 = d.BCG01
+		LEFT JOIN BHJ1 f2 ON f2.BHJ01 = b.BBT08
+		left join BDK1 G on G.BBX01 = A.BBX01 and g.bdk06 = 9
+		WHERE A.BDA01 < ''4''
+		and h.bck01a in (select a.bck01 from bck1 a join baz1 b on a.bck01=b.bck01 and b.bau01 in (''01'') and b.acf01 !=2 where a.corporationid=@yiyuanid)
+		AND EXISTS (
+			SELECT * FROM
+				( SELECT BCK01, ACF01 FROM baz1 WHERE bau01 IN (''51'', ''52'', ''53'') ) h3
+			WHERE h3.BCK01 = h.BCK01B AND  h3.ACF01 != 2
+		);' where id = 10000057;
+end if;
+END $$;
+
+--中药
+
+do $$  
+begin
+if not exists
+(select 1 from sys_scripts where id = 10000058) then
+INSERT INTO sys_scripts ("id", "categoryid", "code", "name", "description", "xtype", 
+"datasourceid", "displaynames", "xrownum", "xtext", "updatedate", "updateuser", "updatemode", 
+"xtext1", "operatetype") 
+VALUES ('10000058', '86', 'mzys', '根据id查询中药solr索引数据', '根据id查询中药solr索引数据', '1', '0', NULL, 
+'1', NULL, '2018-02-01 10:12:50', NULL, '0', 'SELECT distinct 
+		h.BCK01A, COALESCE(@dbtype,''null'')||@yiyuanid||a.bda01||h1.bck01||h.bck01a||d.BBY01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+		e.BDA01, e.BDA02,f.AAS02, a.BBX01, a.BDO01, d.BBY04 as BBX04, a.BBX05, d.BBY05, a.BDG02
+			    , (COALESCE(b.BAP02,'''')||''、''||COALESCE(c.BAG11,'''')||''、''|| case when COALESCE(f2.BHJ01,0)=0 then '''' else f2.BHJ02 end) as NBBX13
+			    , b.BBT10, b.BBT11, d.BBY06, d.BBE02, d.BBY01,d.BBY08,c.BAG27
+			    , CASE WHEN 1=1 THEN c.BDG02A ELSE c.BDG02B END AS NUnit
+			    , case when ''0''=''2'' then GetDrugPrice(h1.BCK01 , d.BBY01 ,  1::int , ''医保''::VARCHAR)
+			        else CASE WHEN  1=1 THEN d.BBY25*c.BAG05 ELSE d.BBY25*c.BAG07 END end AS Price   
+			    , COALESCE(h1.LSQty,0)/c.BAG05 AS amount
+			    , f1.BCG02,d.BBY29,f.AAS07,COALESCE(h1.BCK01,0) BCK01,d.BBY44,d.acf01,
+			    g.abbrw,  g.abbrp, g.bdk03,c.bag03,c.bag05,h2.bck03
+			  FROM BBX1 a
+			  JOIN BBT1 b ON a.BBX01 = b.BBX01
+			  JOIN BAG1 c ON b.BBX01 = c.BBX01
+			  JOIN BBY1 d ON c.BBY01 = d.BBY01  AND d.ACF01 !=2 And now()::timestamp < d.BBY31 and d.bby01 in (@bby01)
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01
+			  JOIN BBJ1 h ON d.BBY01 = h.BBY01 
+			  and exists(select * from (select BCK01,ACF01 from baz1 where bau01 in (''51'',''52'',''53'') ) h3 where h3.BCK01 = h.BCK01B and h3.ACF01 !=2)
+			  JOIN V_DPK6 h1 ON h.BBY01 = h1.BBY01 AND h.BCK01B = h1.BCK01 and h1.ACF01 !=2
+			  and h1.bck01 in (select bck01 from bck1 where corporationid = #{yiyuanid}::int)
+			  and ((getsysparamvalue(9999, 9999, 1) = ''1'') or (getsysparamvalue(9999, 9999, 1) <> ''1'' and  COALESCE(h1.LSQty,0)>0))
+			  left join bck1 h2 on h1.bck01 = h2.bck01
+			  left JOIN AAS1 f ON f.AAS01 = d.AAS01
+			  left join BCG1 f1 on f1.BCG01 = d.BCG01
+			  left join BHJ1 f2 on f2.BHJ01 = b.BBT08
+			  left join BDK1 G on G.BBX01 = A .BBX01 and bdk06 = 9
+			  WHERE a.BDA01 = ''3'' and h.bck01a in (select a.bck01 from bck1 a join baz1 b on a.bck01=b.bck01 and b.bau01 in (''01'') and b.acf01 !=2 where a.corporationid=@yiyuanid);', NULL) ;
+else 
+update sys_scripts set xtext1 = 'SELECT distinct 
+		h.BCK01A, COALESCE(@dbtype,''null'')||@yiyuanid||a.bda01||h1.bck01||h.bck01a||d.BBY01 as id, COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+		e.BDA01, e.BDA02,f.AAS02, a.BBX01, a.BDO01, d.BBY04 as BBX04, a.BBX05, d.BBY05, a.BDG02
+			    , (COALESCE(b.BAP02,'''')||''、''||COALESCE(c.BAG11,'''')||''、''|| case when COALESCE(f2.BHJ01,0)=0 then '''' else f2.BHJ02 end) as NBBX13
+			    , b.BBT10, b.BBT11, d.BBY06, d.BBE02, d.BBY01,d.BBY08,c.BAG27
+			    , CASE WHEN 1=1 THEN c.BDG02A ELSE c.BDG02B END AS NUnit
+			    , case when ''0''=''2'' then GetDrugPrice(h1.BCK01 , d.BBY01 ,  1::int , ''医保''::VARCHAR)
+			        else CASE WHEN  1=1 THEN d.BBY25*c.BAG05 ELSE d.BBY25*c.BAG07 END end AS Price   
+			    , COALESCE(h1.LSQty,0)/c.BAG05 AS amount
+			    , f1.BCG02,d.BBY29,f.AAS07,COALESCE(h1.BCK01,0) BCK01,d.BBY44,d.acf01,
+			    g.abbrw,  g.abbrp, g.bdk03,c.bag03,c.bag05,h2.bck03
+			  FROM BBX1 a
+			  JOIN BBT1 b ON a.BBX01 = b.BBX01
+			  JOIN BAG1 c ON b.BBX01 = c.BBX01
+			  JOIN BBY1 d ON c.BBY01 = d.BBY01  AND d.ACF01 !=2 And now()::timestamp < d.BBY31 and d.bby01 in (@bby01)
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01
+			  JOIN BBJ1 h ON d.BBY01 = h.BBY01 
+			  and exists(select * from (select BCK01,ACF01 from baz1 where bau01 in (''51'',''52'',''53'') ) h3 where h3.BCK01 = h.BCK01B and h3.ACF01 !=2)
+			  JOIN V_DPK6 h1 ON h.BBY01 = h1.BBY01 AND h.BCK01B = h1.BCK01 and h1.ACF01 !=2
+			  and h1.bck01 in (select bck01 from bck1 where corporationid = #{yiyuanid}::int)
+			  and ((getsysparamvalue(9999, 9999, 1) = ''1'') or (getsysparamvalue(9999, 9999, 1) <> ''1'' and  COALESCE(h1.LSQty,0)>0))
+			  left join bck1 h2 on h1.bck01 = h2.bck01
+			  left JOIN AAS1 f ON f.AAS01 = d.AAS01
+			  left join BCG1 f1 on f1.BCG01 = d.BCG01
+			  left join BHJ1 f2 on f2.BHJ01 = b.BBT08
+			  left join BDK1 G on G.BBX01 = A .BBX01 and bdk06 = 9
+			  WHERE a.BDA01 = ''3'' and h.bck01a in (select a.bck01 from bck1 a join baz1 b on a.bck01=b.bck01 and b.bau01 in (''01'') and b.acf01 !=2 where a.corporationid=@yiyuanid);' where id = 10000058;
+end if;
+END $$;
+--方剂
+-- select max(id) from sys_scripts;
+
+do $$  
+begin
+if not exists
+(select 1 from sys_scripts where id = 10000059) then
+INSERT INTO sys_scripts ("id", "categoryid", "code", "name", "description", "xtype", 
+"datasourceid", "displaynames", "xrownum", "xtext", "updatedate", "updateuser", "updatemode", 
+"xtext1", "operatetype") 
+VALUES ('10000059', '86', 'mzys', '根据id查询西药solr索引数据', '根据id查询西药solr索引数据', '1', '0', NULL, 
+'1', NULL, '2018-02-01 10:12:50', NULL, '0', 'SELECT  distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id, COALESCE(@dbtype,''null'')||@yiyuanid as corporationid, 0 as bck01a,
+					e.BDA01, e.BDA02, A.BDG02 AS NUnit, A.BBX01, A.BDO01, A.BBX04, A.BBX05, A.BBX05 BBY05,
+					CASE
+				WHEN A .BDA01 IN (''8'', ''9'') THEN
+					A .BBX06
+				WHEN A .BDA01 = ''T'' THEN
+					a1.AAF02
+				WHEN A .BDA01 = ''E'' THEN
+					a2.BBC02
+				WHEN A .BDA01 = ''L'' THEN
+					a3.AAV02
+				WHEN A .BDA01 = ''S'' THEN
+					a4.ACH02
+				WHEN A .BDA01 = ''A'' THEN
+					a5.ACI02
+				WHEN A .BDA01 = ''N'' THEN
+					a6.AAG02
+				WHEN A .BDA01 = ''Z'' THEN
+					a7.AAP02
+				ELSE
+					NULL
+				END NBBX13,
+				A.BBX12 AS BAG27,
+				CASE
+			WHEN getsysparamvalue(9999, 9999, 60) = ''2'' THEN
+				GetBBX1Price (A .BBX01, ''自费'')
+			ELSE
+				vb.Price
+			END price,
+			A.BBX29, f.AAS02, '''' BCG02, '''' BBY06, '''' BBE02, A.BBX01, f.AAS07, A.BBX36, a.acf01, g.abbrw, g.abbrp, g.bdk03
+		FROM BBX1 A
+		JOIN BDA1 e ON A .BDA01 = e.BDA01 AND e.BEH01 = ''3''
+		LEFT JOIN V_BDU vb ON A .BBX01 = vb.BBX01
+		LEFT JOIN AAS1 f ON f.AAS01 = A .AAS01
+		LEFT JOIN AAF1 a1 ON A .BDA01 = ''T''
+		AND A .BBX13 = a1.AAF01
+		LEFT JOIN BBC1 a2 ON A .BDA01 = ''E''
+		AND A .BBX13 = a2.BBC01
+		LEFT JOIN AAV1 a3 ON A .BDA01 = ''L''
+		AND A .BBX13 = a3.AAV01
+		LEFT JOIN ACH1 a4 ON A .BDA01 = ''S''
+		AND A .bbx13 = a4.ACH01
+		LEFT JOIN ACI1 a5 ON A .BDA01 = ''A''
+		AND CAST (A .BBX01 AS VARCHAR) = a5.ACI01
+		LEFT JOIN AAP1 a7 ON A .BDA01 = ''Z''
+		AND A .BBX13 = a7.AAP01
+		LEFT JOIN AAG1 a6 ON A .BDA01 = ''N''
+		AND A .BBX13 = CAST (a6.AAG01 AS VARCHAR)
+		left join BDK1 G on G.BBX01 = A .BBX01 and bdk06 = 9
+		WHERE a.bbx01 in (@bbx01) 
+		and	(
+				(A .BBX11 = 1)
+				OR (
+					A .BBX11 = 0
+					AND A .BBX12 IN (1, 3, 4)
+				)
+			)
+		AND A.BBX09 IN (0, 1) AND A.BBX25 > now() AND A.BDA01 > ''7'' AND A.BDA01 <> ''M''
+		AND  A.ACF01 !=2;', NULL);
+else 
+update sys_scripts set xtext1 = 'SELECT  distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id, COALESCE(@dbtype,''null'')||@yiyuanid as corporationid, 0 as bck01a,
+					e.BDA01, e.BDA02, A.BDG02 AS NUnit, A.BBX01, A.BDO01, A.BBX04, A.BBX05, A.BBX05 BBY05,
+					CASE
+				WHEN A .BDA01 IN (''8'', ''9'') THEN
+					A .BBX06
+				WHEN A .BDA01 = ''T'' THEN
+					a1.AAF02
+				WHEN A .BDA01 = ''E'' THEN
+					a2.BBC02
+				WHEN A .BDA01 = ''L'' THEN
+					a3.AAV02
+				WHEN A .BDA01 = ''S'' THEN
+					a4.ACH02
+				WHEN A .BDA01 = ''A'' THEN
+					a5.ACI02
+				WHEN A .BDA01 = ''N'' THEN
+					a6.AAG02
+				WHEN A .BDA01 = ''Z'' THEN
+					a7.AAP02
+				ELSE
+					NULL
+				END NBBX13,
+				A.BBX12 AS BAG27,
+				CASE
+			WHEN getsysparamvalue(9999, 9999, 60) = ''2'' THEN
+				GetBBX1Price (A .BBX01, ''自费'')
+			ELSE
+				vb.Price
+			END price,
+			A.BBX29, f.AAS02, '''' BCG02, '''' BBY06, '''' BBE02, A.BBX01, f.AAS07, A.BBX36, a.acf01, g.abbrw, g.abbrp, g.bdk03
+		FROM BBX1 A
+		JOIN BDA1 e ON A .BDA01 = e.BDA01 AND e.BEH01 = ''3''
+		LEFT JOIN V_BDU vb ON A .BBX01 = vb.BBX01
+		LEFT JOIN AAS1 f ON f.AAS01 = A .AAS01
+		LEFT JOIN AAF1 a1 ON A .BDA01 = ''T''
+		AND A .BBX13 = a1.AAF01
+		LEFT JOIN BBC1 a2 ON A .BDA01 = ''E''
+		AND A .BBX13 = a2.BBC01
+		LEFT JOIN AAV1 a3 ON A .BDA01 = ''L''
+		AND A .BBX13 = a3.AAV01
+		LEFT JOIN ACH1 a4 ON A .BDA01 = ''S''
+		AND A .bbx13 = a4.ACH01
+		LEFT JOIN ACI1 a5 ON A .BDA01 = ''A''
+		AND CAST (A .BBX01 AS VARCHAR) = a5.ACI01
+		LEFT JOIN AAP1 a7 ON A .BDA01 = ''Z''
+		AND A .BBX13 = a7.AAP01
+		LEFT JOIN AAG1 a6 ON A .BDA01 = ''N''
+		AND A .BBX13 = CAST (a6.AAG01 AS VARCHAR)
+		left join BDK1 G on G.BBX01 = A .BBX01 and bdk06 = 9
+		WHERE a.bbx01 in (@bbx01) 
+		and	(
+				(A .BBX11 = 1)
+				OR (
+					A .BBX11 = 0
+					AND A .BBX12 IN (1, 3, 4)
+				)
+			)
+		AND A.BBX09 IN (0, 1) AND A.BBX25 > now() AND A.BDA01 > ''7'' AND A.BDA01 <> ''M''
+		AND  A.ACF01 !=2
+;' where id = 10000059;
+end if;
+END $$;
+
+--检验
+do $$  
+begin
+if not exists
+(select 1 from sys_scripts where id = 10000060) then
+INSERT INTO sys_scripts ("id", "categoryid", "code", "name", "description", "xtype", 
+"datasourceid", "displaynames", "xrownum", "xtext", "updatedate", "updateuser", "updatemode", 
+"xtext1", "operatetype") 
+VALUES ('10000060', '86', 'mzys', '根据id查询检验solr索引数据', '根据id查询检验solr索引数据', '1', '0', NULL, 
+'1', NULL, '2018-02-01 10:12:50', NULL, '0', 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+         	e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBY1Price(d.BBY01,''普通'') else d.BBY25 end price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,a.bbx06 as BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44 ,a.acf01,
+				g.abbrw,
+			 g.abbrp,
+			 g.bdk03
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01 and c.BCT33 = 1
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 and d.ACF01 !=2
+			JOIN BDA1 e ON e.BDA01 = a.BDA01  AND e.BEH01=''5'' AND e.BDA01 in (''4'',''M'')
+			 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP 
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01)
+			union
+			SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, a.BDG02 AS NUnit
+			  , a.BBX01, a.BDO01, a.BBX04, a.BBX05,a.BBX05 BBY05 
+			  , a3.AAV02 NBBX13,a.BBX12 as BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBX1Price(a.BBX01,''普通'') else vb.Price end price 
+			  ,a.BBX29,f.AAS02,'''' BCG02,a.bbx06 BBY06,'''' BBE02,a.BBX01,f.AAS07,A.BBX36 ,a.acf01,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01 AND e.BEH01= ''5''
+			  LEFT JOIN V_BDU vb ON a.BBX01 = vb.BBX01
+			  LEFT JOIN AAS1 f ON f.AAS01 = a.AAS01
+			  LEFT JOIN AAV1 a3 ON a.BDA01=''L'' AND a.BBX13=a3.AAV01
+			  left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE ((a.BBX11 =1)or(a.BBX11 = 0 and a.BBX12  in (1,3,4))) AND a.BBX09 IN (0, 1) 
+			   AND a.BBX25 > now()::TIMESTAMP  AND a.BDA01 >''7'' and a.BDA01 <> ''M''
+			   and ((a.BBX46 = 0)or(a.BBX46 = 1 and exists(select * from BMP1 c3 where c3.BBX01 = a.BBX01 and c3.BDP02 = ''自费'')))
+			   AND ((a.BDA01 <> ''9'')OR((a.BDA01=''9'') AND ((a.BBX15=0 and a.BCE01 =  1)
+			    or a.BBX15=2 )))   
+			   and a.ACF01 !=2 and a.bbx01 in (@bbx01);', NULL);
+else 
+update sys_scripts set xtext1 = 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+         	e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBY1Price(d.BBY01,''普通'') else d.BBY25 end price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,a.bbx06 as BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44 ,a.acf01,
+				g.abbrw,
+			 g.abbrp,
+			 g.bdk03
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01 and c.BCT33 = 1
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 and d.ACF01 !=2
+			JOIN BDA1 e ON e.BDA01 = a.BDA01  AND e.BEH01=''5'' AND e.BDA01 in (''4'',''M'')
+			 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP 
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01)
+			union
+			SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, a.BDG02 AS NUnit
+			  , a.BBX01, a.BDO01, a.BBX04, a.BBX05,a.BBX05 BBY05 
+			  , a3.AAV02 NBBX13,a.BBX12 as BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBX1Price(a.BBX01,''普通'') else vb.Price end price 
+			  ,a.BBX29,f.AAS02,'''' BCG02,a.bbx06 BBY06,'''' BBE02,a.BBX01,f.AAS07,A.BBX36 ,a.acf01,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01 AND e.BEH01= ''5''
+			  LEFT JOIN V_BDU vb ON a.BBX01 = vb.BBX01
+			  LEFT JOIN AAS1 f ON f.AAS01 = a.AAS01
+			  LEFT JOIN AAV1 a3 ON a.BDA01=''L'' AND a.BBX13=a3.AAV01
+			  left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE ((a.BBX11 =1)or(a.BBX11 = 0 and a.BBX12  in (1,3,4))) AND a.BBX09 IN (0, 1) 
+			   AND a.BBX25 > now()::TIMESTAMP  AND a.BDA01 >''7'' and a.BDA01 <> ''M''
+			   and ((a.BBX46 = 0)or(a.BBX46 = 1 and exists(select * from BMP1 c3 where c3.BBX01 = a.BBX01 and c3.BDP02 = ''自费'')))
+			   AND ((a.BDA01 <> ''9'')OR((a.BDA01=''9'') AND ((a.BBX15=0 and a.BCE01 =  1)
+			    or a.BBX15=2 )))   
+			   and a.ACF01 !=2 and a.bbx01 in (@bbx01);' where id = 10000060;
+end if;
+END $$;
+
+--检查
+do $$  
+begin
+if not exists
+(select 1 from sys_scripts where id = 10000061) then
+INSERT INTO sys_scripts ("id", "categoryid", "code", "name", "description", "xtype", 
+"datasourceid", "displaynames", "xrownum", "xtext", "updatedate", "updateuser", "updatemode", 
+"xtext1", "operatetype") 
+VALUES ('10000061', '86', 'mzys', '根据id查询检查solr索引数据', '根据id查询检查solr索引数据', '1', '0', NULL, 
+'1', NULL, '2018-02-01 10:12:50', NULL, '0', 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+         	e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBY1Price(d.BBY01,''普通'') else d.BBY25 end price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44,a.acf01 ,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01 and c.BCT33 = 1
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 AND d.ACF01 !=2 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP 
+			JOIN BDA1 e ON e.BDA01 = a.BDA01 AND e.BEH01=''4'' AND e.BDA01 in (''4'',''M'') 
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE  a.bbx01 in (@bbx01)
+			union
+			SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, a.BDG02 AS NUnit
+			  , a.BBX01, a.BDO01, a.BBX04, a.BBX05,a.BBX05 BBY05 
+			  ,  a2.BBC02 NBBX13,a.BBX12 as BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBX1Price(a.BBX01,''普通'') else vb.Price end price 
+			  ,a.BBX29,f.AAS02,'''' BCG02,'''' BBY06,'''' BBE02,a.BBX01,f.AAS07,A.BBX36,a.acf01,
+			  g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01 AND e.BEH01= ''4''
+			  LEFT JOIN V_BDU vb ON a.BBX01 = vb.BBX01
+			  LEFT JOIN AAS1 f ON f.AAS01 = a.AAS01
+			  LEFT JOIN BBC1 a2 ON a.BDA01=''E''  AND a.BBX13=a2.BBC01
+			  left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01) and ((a.BBX11 =1)or(a.BBX11 = 0 and a.BBX12  in (1,3,4))) AND a.BBX09 IN (0, 1) 
+			   AND a.BBX25 > now()::TIMESTAMP   AND a.BDA01 >''7'' and a.BDA01 <> ''M''
+			   and ((a.BBX46 = 0)or(a.BBX46 = 1 and exists(select * from BMP1 c3 where c3.BBX01 = a.BBX01 and c3.BDP02 = ''自费'')))
+			   AND ((a.BDA01 <> ''9'')OR((a.BDA01=''9'') AND ((a.BBX15=0 and a.BCE01 = 1)
+			    or a.BBX15=2 )))   
+			   and a.ACF01 !=2;', NULL);
+else 
+update sys_scripts set xtext1 = 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+         	e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBY1Price(d.BBY01,''普通'') else d.BBY25 end price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44,a.acf01 ,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01 and c.BCT33 = 1
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 AND d.ACF01 !=2 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP 
+			JOIN BDA1 e ON e.BDA01 = a.BDA01 AND e.BEH01=''4'' AND e.BDA01 in (''4'',''M'') 
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE  a.bbx01 in (@bbx01)
+			union
+			SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, a.BDG02 AS NUnit
+			  , a.BBX01, a.BDO01, a.BBX04, a.BBX05,a.BBX05 BBY05 
+			  ,  a2.BBC02 NBBX13,a.BBX12 as BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBX1Price(a.BBX01,''普通'') else vb.Price end price 
+			  ,a.BBX29,f.AAS02,'''' BCG02,'''' BBY06,'''' BBE02,a.BBX01,f.AAS07,A.BBX36,a.acf01,
+			  g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01 AND e.BEH01= ''4''
+			  LEFT JOIN V_BDU vb ON a.BBX01 = vb.BBX01
+			  LEFT JOIN AAS1 f ON f.AAS01 = a.AAS01
+			  LEFT JOIN BBC1 a2 ON a.BDA01=''E''  AND a.BBX13=a2.BBC01
+			  left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01) and ((a.BBX11 =1)or(a.BBX11 = 0 and a.BBX12  in (1,3,4))) AND a.BBX09 IN (0, 1) 
+			   AND a.BBX25 > now()::TIMESTAMP   AND a.BDA01 >''7'' and a.BDA01 <> ''M''
+			   and ((a.BBX46 = 0)or(a.BBX46 = 1 and exists(select * from BMP1 c3 where c3.BBX01 = a.BBX01 and c3.BDP02 = ''自费'')))
+			   AND ((a.BDA01 <> ''9'')OR((a.BDA01=''9'') AND ((a.BBX15=0 and a.BCE01 = 1)
+			    or a.BBX15=2 )))   
+			   and a.ACF01 !=2;' where id = 10000061;
+end if;
+END $$;
+--手术
+do $$  
+begin
+if not exists
+(select 1 from sys_scripts where id = 10000062) then
+INSERT INTO sys_scripts ("id", "categoryid", "code", "name", "description", "xtype", 
+"datasourceid", "displaynames", "xrownum", "xtext", "updatedate", "updateuser", "updatemode", 
+"xtext1", "operatetype") 
+VALUES ('10000062', '86', 'mzys', '根据id查询手术solr索引数据', '根据id查询手术solr索引数据', '1', '0', NULL, 
+'1', NULL, '2018-02-01 10:12:50', NULL, '0', 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid, 
+         	e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBY1Price(d.BBY01,''普通'') else d.BBY25 end price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44,a.acf01,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 and c.BCT33 = 1 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP 
+			AND d.ACF01 !=2
+			JOIN BDA1 e ON e.BDA01 = a.BDA01  AND e.BEH01=''6'' AND e.BDA01 in (''4'',''M'')
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE  a.bbx01 in (@bbx01)  
+			union
+			SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, a.BDG02 AS NUnit
+			  , a.BBX01, a.BDO01, a.BBX04, a.BBX05,a.BBX05 BBY05 
+			  , a4.ACH02 NBBX13,a.BBX12 as BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBX1Price(a.BBX01,''普通'') else vb.Price end price 
+			  ,a.BBX29,f.AAS02,'''' BCG02,'''' BBY06,'''' BBE02,a.BBX01,f.AAS07,A.BBX36,a.acf01,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01 AND e.BEH01= ''6''
+			  LEFT JOIN V_BDU vb ON a.BBX01 = vb.BBX01
+			  LEFT JOIN AAS1 f ON f.AAS01 = a.AAS01
+			  LEFT JOIN ACH1 a4 ON a.BDA01=''S'' AND a.bbx13=a4.ACH01
+			  left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01) and ((a.BBX11 =1)or(a.BBX11 = 0 and a.BBX12  in (1,3,4))) AND a.BBX09 IN (0, 1) 
+			   AND a.BBX25 > now()::TIMESTAMP AND a.BDA01 >''7'' and a.BDA01 <> ''M''
+			   and ((a.BBX46 = 0)or(a.BBX46 = 1 and exists(select * from BMP1 c3 where c3.BBX01 = a.BBX01 and c3.BDP02 = ''自费'')))
+			   AND ((a.BDA01 <> ''9'')OR((a.BDA01=''9'') AND ((a.BBX15=0 and a.BCE01 =  1)
+			    or a.BBX15=2 )))   
+			   and  a.ACF01 != 2;', NULL);
+else 
+update sys_scripts set xtext1 = 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid, 
+         	e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBY1Price(d.BBY01,''普通'') else d.BBY25 end price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44,a.acf01,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 and c.BCT33 = 1 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP 
+			AND d.ACF01 !=2
+			JOIN BDA1 e ON e.BDA01 = a.BDA01  AND e.BEH01=''6'' AND e.BDA01 in (''4'',''M'')
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE  a.bbx01 in (@bbx01)  
+			union
+			SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, a.BDG02 AS NUnit
+			  , a.BBX01, a.BDO01, a.BBX04, a.BBX05,a.BBX05 BBY05 
+			  , a4.ACH02 NBBX13,a.BBX12 as BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBX1Price(a.BBX01,''普通'') else vb.Price end price 
+			  ,a.BBX29,f.AAS02,'''' BCG02,'''' BBY06,'''' BBE02,a.BBX01,f.AAS07,A.BBX36,a.acf01,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01 AND e.BEH01= ''6''
+			  LEFT JOIN V_BDU vb ON a.BBX01 = vb.BBX01
+			  LEFT JOIN AAS1 f ON f.AAS01 = a.AAS01
+			  LEFT JOIN ACH1 a4 ON a.BDA01=''S'' AND a.bbx13=a4.ACH01
+			  left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01) and ((a.BBX11 =1)or(a.BBX11 = 0 and a.BBX12  in (1,3,4))) AND a.BBX09 IN (0, 1) 
+			   AND a.BBX25 > now()::TIMESTAMP AND a.BDA01 >''7'' and a.BDA01 <> ''M''
+			   and ((a.BBX46 = 0)or(a.BBX46 = 1 and exists(select * from BMP1 c3 where c3.BBX01 = a.BBX01 and c3.BDP02 = ''自费'')))
+			   AND ((a.BDA01 <> ''9'')OR((a.BDA01=''9'') AND ((a.BBX15=0 and a.BCE01 =  1)
+			    or a.BBX15=2 )))   
+			   and  a.ACF01 != 2;' where id = 10000062;
+end if;
+END $$;
+
+--治疗
+do $$  
+begin
+if not exists
+(select 1 from sys_scripts where id = 10000063) then
+INSERT INTO sys_scripts ("id", "categoryid", "code", "name", "description", "xtype", 
+"datasourceid", "displaynames", "xrownum", "xtext", "updatedate", "updateuser", "updatemode", 
+"xtext1", "operatetype") 
+VALUES ('10000063', '86', 'mzys', '根据id查询治疗solr索引数据', '根据id查询治疗solr索引数据', '1', '0', NULL, 
+'1', NULL, '2018-02-01 10:12:50', NULL, '0', 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+         	e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBY1Price(d.BBY01,''普通'') else d.BBY25 end price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44,a.acf01,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 and d.ACF01 !=2
+			JOIN BDA1 e ON e.BDA01 = a.BDA01 AND e.BEH01=''7''
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01) AND e.BDA01 in (''4'',''M'') and c.BCT33 = 1 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP  
+			union
+			SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, a.BDG02 AS NUnit
+			  , a.BBX01, a.BDO01, a.BBX04, a.BBX05,a.BBX05 BBY05 
+			  , CASE WHEN a.BDA01 IN (''8'',''9'') THEN a.BBX06
+			         WHEN a.BDA01 = ''T'' THEN a1.AAF02
+			         WHEN a.BDA01 = ''A'' THEN a5.ACI02         
+			         WHEN a.BDA01 = ''N'' THEN a6.AAG02
+			         WHEN a.BDA01 = ''Z'' THEN a7.AAP02
+			       ELSE NULL END NBBX13,a.BBX12 as BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBX1Price(a.BBX01,''普通'') else vb.Price end price 
+			  ,a.BBX29,f.AAS02,'''' BCG02,'''' BBY06,'''' BBE02,a.BBX01,f.AAS07,A.BBX36 ,a.acf01,
+				g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01 AND e.BEH01= ''7''
+			  LEFT JOIN V_BDU vb ON a.BBX01 = vb.BBX01
+			  LEFT JOIN AAS1 f ON f.AAS01 = a.AAS01
+			  LEFT JOIN AAF1 a1 ON a.BDA01=''T'' AND a.BBX13=a1.AAF01
+			  LEFT JOIN ACI1 a5 ON a.BDA01=''A'' AND a.BBX01=to_number(a5.ACI01,''9999'') 
+			  LEFT JOIN AAP1 a7 ON a.BDA01=''Z'' AND a.BBX13=a7.AAP01 
+			  LEFT JOIN AAG1 a6 ON a.BDA01=''N'' AND a.BBX13=CAST(a6.AAG01 as varchar(10))   
+			  left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01) and ((a.BBX11 =1)or(a.BBX11 = 0 and a.BBX12  in (1,3,4))) AND a.BBX09 IN (0, 1) 
+			   AND a.BBX25 > now()::TIMESTAMP  AND a.BDA01 >''7'' and a.BDA01 <> ''M''
+			   and ((a.BBX46 = 0)or(a.BBX46 = 1 and exists(select * from BMP1 c3 where c3.BBX01 = a.BBX01 and c3.BDP02 = ''自费'')))
+			   AND ((a.BDA01 <> ''9'')OR((a.BDA01=''9'') AND ((a.BBX15=0 and a.BCE01 =  1)
+			    or a.BBX15=2 )))   
+			   and  a.ACF01 !=2;', NULL);
+else 
+update sys_scripts set xtext1 = 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+         	e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBY1Price(d.BBY01,''普通'') else d.BBY25 end price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44,a.acf01,
+			g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 and d.ACF01 !=2
+			JOIN BDA1 e ON e.BDA01 = a.BDA01 AND e.BEH01=''7''
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01) AND e.BDA01 in (''4'',''M'') and c.BCT33 = 1 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP  
+			union
+			SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||a.bbx01 as id,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,
+			e.BDA01, e.BDA02, a.BDG02 AS NUnit
+			  , a.BBX01, a.BDO01, a.BBX04, a.BBX05,a.BBX05 BBY05 
+			  , CASE WHEN a.BDA01 IN (''8'',''9'') THEN a.BBX06
+			         WHEN a.BDA01 = ''T'' THEN a1.AAF02
+			         WHEN a.BDA01 = ''A'' THEN a5.ACI02         
+			         WHEN a.BDA01 = ''N'' THEN a6.AAG02
+			         WHEN a.BDA01 = ''Z'' THEN a7.AAP02
+			       ELSE NULL END NBBX13,a.BBX12 as BAG27
+			  ,case when getsysparamvalue(9999, 9999, 60)=''2'' then GetBBX1Price(a.BBX01,''普通'') else vb.Price end price 
+			  ,a.BBX29,f.AAS02,'''' BCG02,'''' BBY06,'''' BBE02,a.BBX01,f.AAS07,A.BBX36 ,a.acf01,
+				g.abbrw,
+		 g.abbrp,
+		 g.bdk03
+			FROM BBX1 a
+			  JOIN BDA1 e ON a.BDA01 = e.BDA01 AND e.BEH01= ''7''
+			  LEFT JOIN V_BDU vb ON a.BBX01 = vb.BBX01
+			  LEFT JOIN AAS1 f ON f.AAS01 = a.AAS01
+			  LEFT JOIN AAF1 a1 ON a.BDA01=''T'' AND a.BBX13=a1.AAF01
+			  LEFT JOIN ACI1 a5 ON a.BDA01=''A'' AND a.BBX01=to_number(a5.ACI01,''9999'') 
+			  LEFT JOIN AAP1 a7 ON a.BDA01=''Z'' AND a.BBX13=a7.AAP01 
+			  LEFT JOIN AAG1 a6 ON a.BDA01=''N'' AND a.BBX13=CAST(a6.AAG01 as varchar(10))   
+			  left join BDK1 G on G.BBX01 = A.BBX01 and bdk06 = 9
+			WHERE a.bbx01 in (@bbx01) and ((a.BBX11 =1)or(a.BBX11 = 0 and a.BBX12  in (1,3,4))) AND a.BBX09 IN (0, 1) 
+			   AND a.BBX25 > now()::TIMESTAMP  AND a.BDA01 >''7'' and a.BDA01 <> ''M''
+			   and ((a.BBX46 = 0)or(a.BBX46 = 1 and exists(select * from BMP1 c3 where c3.BBX01 = a.BBX01 and c3.BDP02 = ''自费'')))
+			   AND ((a.BDA01 <> ''9'')OR((a.BDA01=''9'') AND ((a.BBX15=0 and a.BCE01 =  1)
+			    or a.BBX15=2 )))   
+			   and  a.ACF01 !=2;' where id = 10000063;
+end if;
+END $$;
+
+--材料
+do $$  
+begin
+if not exists
+(select 1 from sys_scripts where id = 10000064) then
+INSERT INTO sys_scripts ("id", "categoryid", "code", "name", "description", "xtype", 
+"datasourceid", "displaynames", "xrownum", "xtext", "updatedate", "updateuser", "updatemode", 
+"xtext1", "operatetype") 
+VALUES ('10000064', '86', 'mzys', '根据id查询材料solr索引数据', '根据id查询材料solr索引数据', '1', '0', NULL, 
+'1', NULL, '2018-02-01 10:12:50', NULL, '0', 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||k.bck01a||d.bby01 as id ,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,k.bck01a bck01a,
+         	 e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  , d.BBY25 price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44 ,a.acf01,g.lsqty amount
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01 and c.BCT33 = 1 and (c.bct40=1 or c.bct40 is null)
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP  and d.bby01 in (@bby01)
+			JOIN BDA1 e ON e.BDA01 = a.BDA01  AND e.BEH01=''8'' AND e.BDA01 in (''4'',''M'')
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			join v_mdk6 g on  d.bby01 = g.bby01  
+			and ((g.lsqty>0 and (select value from sys_parameters where productid = 9999 and programid = 9999 and paramno = 1)<>''1'') or ((select value from sys_parameters where productid = 9999 and programid = 9999 and paramno = 1)=''1''))
+			and g.acf01 !=2
+			join blo1 k on k.bby01 = g.bby01 and k.bck01b = g.bck01 
+			left join bck1 m on m.bck01 = k.bck01b 
+			union 
+			 SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||k.bck01a||d.bby01 as id ,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,k.bck01a bck01a,
+         	 e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  , d.BBY25 price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44 ,a.acf01,999999 amount
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01 and c.BCT33 = 1 and c.bct40=0 
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP  and d.bby01 in (@bby01)
+			JOIN BDA1 e ON e.BDA01 = a.BDA01  AND e.BEH01=''8'' AND e.BDA01 in (''4'',''M'')
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			join blo1 k on k.bby01 = d.bby01 
+			left join bck1 m on m.bck01 = k.bck01b ;', NULL);
+else 
+update sys_scripts set xtext1 = 'SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||k.bck01a||d.bby01 as id ,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,k.bck01a bck01a,
+         	 e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  , d.BBY25 price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44 ,a.acf01,g.lsqty amount
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01 and c.BCT33 = 1 and (c.bct40=1 or c.bct40 is null)
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP  and d.bby01 in (@bby01)
+			JOIN BDA1 e ON e.BDA01 = a.BDA01  AND e.BEH01=''8'' AND e.BDA01 in (''4'',''M'')
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			join v_mdk6 g on  d.bby01 = g.bby01  
+			and ((g.lsqty>0 and (select value from sys_parameters where productid = 9999 and programid = 9999 and paramno = 1)<>''1'') or ((select value from sys_parameters where productid = 9999 and programid = 9999 and paramno = 1)=''1''))
+			and g.acf01 !=2
+			join blo1 k on k.bby01 = g.bby01 and k.bck01b = g.bck01 
+			left join bck1 m on m.bck01 = k.bck01b
+			union 
+			 SELECT distinct COALESCE(@dbtype,''null'')||@yiyuanid||k.bck01a||d.bby01 as id ,COALESCE(@dbtype,''null'')||@yiyuanid as corporationid,k.bck01a bck01a,
+         	 e.BDA01, e.BDA02,d.BBY08 NUnit, a.BBX01, a.BDO01, d.BBY04 as BBX04, d.BBY05 BBX05, d.BBY05, '''' NBBX13, 0 BAG27
+			  , d.BBY25 price 
+			  ,d.BBY29, f.AAS02 ,h.BCG02,d.BBY06, d.BBE02, d.BBY01,f.AAS07,d.BBY44 ,a.acf01,999999 amount
+			FROM BBX1 a
+			JOIN BCT1 c ON c.BBX01 = a.BBX01 and c.BCT33 = 1 and c.bct40=0 
+			JOIN BBY1 d ON d.BBY01 = c.BBY01 AND d.BBY31 > (CURRENT_DATE||'' 23:59:59.999'')::TIMESTAMP and d.bby01 in (@bby01)
+			JOIN BDA1 e ON e.BDA01 = a.BDA01  AND e.BEH01=''8'' AND e.BDA01 in (''4'',''M'')
+			LEFT JOIN AAS1 f ON f.AAS01 = d.AAS01
+			left join BCG1 h on h.BCG01 = d.BCG01
+			join blo1 k on k.bby01 = d.bby01 
+			left join bck1 m on m.bck01 = k.bck01b;' where id = 10000064;
+end if;
+END $$;

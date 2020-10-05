@@ -1,0 +1,29 @@
+Atitit sql common cmd 常见指令
+
+
+SQL
+分类
+数据查询语言（DQL）
+数据定义语言（DDL）
+数据操纵语言（DML）
+数据控制语言（DCL）
+
+指令
+SELECT
+INSERT
+UPDATE
+MERGE
+DELETE
+JOIN
+UNION
+CREATE
+DROP
+Begin work
+COMMIT
+ROLLBACK
+TRUNCATE
+ALTER
+
+
+
+
